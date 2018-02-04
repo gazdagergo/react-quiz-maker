@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { DropTarget } from 'react-dnd'
+import { DropTarget } from 'react-dnd';
+import ItemTypes from './ItemTypes'
 
 const style = {
-  height: '12rem',
-  width: '12rem',
+  padding: '0.5rem 1rem',
+  width: '10rem',
   marginRight: '1.5rem',
   marginBottom: '1.5rem',
   color: 'white',
@@ -12,7 +13,7 @@ const style = {
   textAlign: 'center',
   fontSize: '1rem',
   lineHeight: 'normal',
-  float: 'left',
+  minHeight: '1rem',
 }
 
 const dustbinTarget = {
@@ -21,7 +22,7 @@ const dustbinTarget = {
   },
 }
 
-@DropTarget(props => props.accepts, dustbinTarget, (connect, monitor) => ({
+@DropTarget(ItemTypes.BOX, dustbinTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop(),
@@ -31,14 +32,12 @@ export default class Dustbin extends Component {
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     canDrop: PropTypes.bool.isRequired,
-    accepts: PropTypes.arrayOf(PropTypes.string).isRequired,
     lastDroppedItem: PropTypes.object,
     onDrop: PropTypes.func.isRequired,
   }
 
   render() {
     const {
-			accepts,
       isOver,
       canDrop,
       connectDropTarget,
@@ -55,12 +54,8 @@ export default class Dustbin extends Component {
 
     return connectDropTarget(
       <div style={{ ...style, backgroundColor }}>
-        {isActive
-          ? 'Release to drop'
-          : `This dustbin accepts: ${accepts.join(', ')}`}
-
         {lastDroppedItem && (
-          <p>Last dropped: {JSON.stringify(lastDroppedItem)}</p>
+          <span>{lastDroppedItem.name}</span>
         )}
       </div>,
     )

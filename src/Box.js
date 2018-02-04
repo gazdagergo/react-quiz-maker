@@ -4,6 +4,8 @@ import { DragSource } from 'react-dnd'
 
 const style = {
 	border: '1px dashed gray',
+	width: '10rem',
+	textAlign: 'center',
 	backgroundColor: 'white',
 	padding: '0.5rem 1rem',
 	marginRight: '1.5rem',
@@ -36,6 +38,8 @@ export default class Box extends Component {
 	render() {
 		const { name, isDropped, isDragging, connectDragSource } = this.props
 		const opacity = isDragging ? 0.4 : 1
+
+		if (isDropped) return null;
 
 		return connectDragSource(
 			<div style={{ ...style, opacity }}>

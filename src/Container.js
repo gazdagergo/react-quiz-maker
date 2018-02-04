@@ -12,18 +12,15 @@ export default class Container extends Component {
     super(props)
     this.state = {
       dustbins: [
-        { accepts: [ItemTypes.GLASS], lastDroppedItem: null },
-        { accepts: [ItemTypes.FOOD], lastDroppedItem: null },
-        {
-          accepts: [ItemTypes.PAPER, ItemTypes.GLASS, NativeTypes.URL],
-          lastDroppedItem: null,
-        },
-        { accepts: [ItemTypes.PAPER, NativeTypes.FILE], lastDroppedItem: null },
+        { lastDroppedItem: null },
+        { lastDroppedItem: null },
+        { lastDroppedItem: null },
+        { lastDroppedItem: null },
       ],
       boxes: [
-        { name: 'Bottle', type: ItemTypes.GLASS },
-        { name: 'Banana', type: ItemTypes.FOOD },
-        { name: 'Magazine', type: ItemTypes.PAPER },
+        { name: 'Bottle', type: ItemTypes.BOX },
+        { name: 'Banana', type: ItemTypes.BOX },
+        { name: 'Magazine', type: ItemTypes.BOX },
       ],
       droppedBoxNames: [],
     }
@@ -39,9 +36,8 @@ export default class Container extends Component {
     return (
       <div>
         <div style={{ overflow: 'hidden', clear: 'both' }}>
-          {dustbins.map(({ accepts, lastDroppedItem }, index) => (
+          {dustbins.map(({ lastDroppedItem }, index) => (
             <Dustbin
-              accepts={accepts}
               lastDroppedItem={lastDroppedItem}
               onDrop={item => this.handleDrop(index, item)}
               key={index}
