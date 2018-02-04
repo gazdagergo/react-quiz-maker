@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { DragSource } from 'react-dnd'
-import ItemTypes from './ItemTypes'
 
 const style = {
 	border: '1px dashed gray',
@@ -11,8 +10,6 @@ const style = {
 	marginBottom: '1.5rem',
 	cursor: 'move',
 	float: 'left',
-	width: 100,
-	textAlign: 'center'
 }
 
 const boxSource = {
@@ -21,18 +18,9 @@ const boxSource = {
 			name: props.name,
 		}
 	},
-
-	endDrag(props, monitor) {
-		const item = monitor.getItem()
-		const dropResult = monitor.getDropResult()
-
-		if (dropResult) {
-			console.log(`You dropped ${item.name} into ${dropResult.name}!`) // eslint-disable-line no-alert
-		}
-	},
 }
 
-@DragSource(ItemTypes.BOX, boxSource, (connect, monitor) => ({
+@DragSource(props => props.type, boxSource, (connect, monitor) => ({
 	connectDragSource: connect.dragSource(),
 	isDragging: monitor.isDragging(),
 }))
@@ -41,16 +29,18 @@ export default class Box extends Component {
 		connectDragSource: PropTypes.func.isRequired,
 		isDragging: PropTypes.bool.isRequired,
 		name: PropTypes.string.isRequired,
+		type: PropTypes.string.isRequired,
 		isDropped: PropTypes.bool.isRequired,
 	}
 
 	render() {
-		const { isDragging, isDropped, connectDragSource } = this.props
-		const { name } = this.props
+		const { name, isDropped, isDragging, connectDragSource } = this.props
 		const opacity = isDragging ? 0.4 : 1
 
-		return connectDragSource(<div style={{ ...style, opacity }}>
-			{name}
-		</div>)
+		return connectDragSource(
+			<div style={{ ...style, opacity }}>
+				{isDropped ? <s>{name}</s> : name}
+			</div>,
+		)
 	}
 }

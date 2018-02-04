@@ -1,27 +1,27 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { DropTarget } from 'react-dnd'
-import ItemTypes from './ItemTypes'
 
 const style = {
-  padding: '0.5rem 1rem',
-  width: 100,
+  height: '12rem',
+  width: '12rem',
   marginRight: '1.5rem',
-  margin: '1.5rem 0',
+  marginBottom: '1.5rem',
   color: 'white',
+  padding: '1rem',
   textAlign: 'center',
   fontSize: '1rem',
+  lineHeight: 'normal',
   float: 'left',
-  border: '1px solid black',
 }
 
-const boxTarget = {
-  drop() {
-    return { name: 'Dustbin' }
+const dustbinTarget = {
+  drop(props, monitor) {
+    props.onDrop(monitor.getItem())
   },
 }
 
-@DropTarget(ItemTypes.BOX, boxTarget, (connect, monitor) => ({
+@DropTarget(props => props.accepts, dustbinTarget, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop(),
@@ -31,11 +31,20 @@ export default class Dustbin extends Component {
     connectDropTarget: PropTypes.func.isRequired,
     isOver: PropTypes.bool.isRequired,
     canDrop: PropTypes.bool.isRequired,
+    accepts: PropTypes.arrayOf(PropTypes.string).isRequired,
+    lastDroppedItem: PropTypes.object,
+    onDrop: PropTypes.func.isRequired,
   }
 
   render() {
-    const { canDrop, isOver, connectDropTarget } = this.props
-    const isActive = canDrop && isOver
+    const {
+			accepts,
+      isOver,
+      canDrop,
+      connectDropTarget,
+      lastDroppedItem,
+		} = this.props
+    const isActive = isOver && canDrop
 
     let backgroundColor = '#222'
     if (isActive) {
@@ -46,7 +55,13 @@ export default class Dustbin extends Component {
 
     return connectDropTarget(
       <div style={{ ...style, backgroundColor }}>
-        {isActive ? 'Drag here' : 'Drag here'}
+        {isActive
+          ? 'Release to drop'
+          : `This dustbin accepts: ${accepts.join(', ')}`}
+
+        {lastDroppedItem && (
+          <p>Last dropped: {JSON.stringify(lastDroppedItem)}</p>
+        )}
       </div>,
     )
   }
