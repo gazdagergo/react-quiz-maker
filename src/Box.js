@@ -11,6 +11,8 @@ const style = {
 	marginBottom: '1.5rem',
 	cursor: 'move',
 	float: 'left',
+	width: 100,
+	textAlign: 'center'
 }
 
 const boxSource = {
@@ -25,7 +27,7 @@ const boxSource = {
 		const dropResult = monitor.getDropResult()
 
 		if (dropResult) {
-			alert(`You dropped ${item.name} into ${dropResult.name}!`) // eslint-disable-line no-alert
+			console.log(`You dropped ${item.name} into ${dropResult.name}!`) // eslint-disable-line no-alert
 		}
 	},
 }
@@ -39,13 +41,16 @@ export default class Box extends Component {
 		connectDragSource: PropTypes.func.isRequired,
 		isDragging: PropTypes.bool.isRequired,
 		name: PropTypes.string.isRequired,
+		isDropped: PropTypes.bool.isRequired,
 	}
 
 	render() {
-		const { isDragging, connectDragSource } = this.props
+		const { isDragging, isDropped, connectDragSource } = this.props
 		const { name } = this.props
 		const opacity = isDragging ? 0.4 : 1
 
-		return connectDragSource(<div style={{ ...style, opacity }}>{name}</div>)
+		return connectDragSource(<div style={{ ...style, opacity }}>
+			{name}
+		</div>)
 	}
 }

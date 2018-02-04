@@ -4,16 +4,15 @@ import { DropTarget } from 'react-dnd'
 import ItemTypes from './ItemTypes'
 
 const style = {
-  height: '12rem',
-  width: '12rem',
+  padding: '0.5rem 1rem',
+  width: 100,
   marginRight: '1.5rem',
-  marginBottom: '1.5rem',
+  margin: '1.5rem 0',
   color: 'white',
-  padding: '1rem',
   textAlign: 'center',
   fontSize: '1rem',
-  lineHeight: 'normal',
   float: 'left',
+  border: '1px solid black',
 }
 
 const boxTarget = {
@@ -47,7 +46,7 @@ export default class Dustbin extends Component {
 
     return connectDropTarget(
       <div style={{ ...style, backgroundColor }}>
-        {isActive ? 'Release to drop' : 'Drag a box here'}
+        {isActive ? 'Drag here' : 'Drag here'}
       </div>,
     )
   }
